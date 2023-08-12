@@ -6,7 +6,7 @@ ENV DEBIAN_FRONTEND=noninteractive
 # Install dependencies
 RUN apt update && apt install -y software-properties-common
 
-# Add the repositories
+# Add Python repositories
 RUN add-apt-repository ppa:deadsnakes/ppa
 
 # Install base python and python pip
@@ -34,8 +34,14 @@ COPY requirements.txt ./requirements.txt
 # Intall the requirements
 RUN python3 -m pip install --no-cache-dir -r ./requirements.txt
 
-#RUN apt install -y nvidia-cuda-toolkit
-# clean up
-# remove the apt package meta data which is not necessary for the container
+# add the jupyter user
+RUN groupadd -r jupyter && useradd -r -g jupyter jupyter
+
+# remove the requirements.txt
 RUN rm -rf ./requirements.txt
+
+# remove the apt cache
 RUN rm -rf /var/lib/apt/lists/*
+
+# change to the jupyter user
+USER jupyter

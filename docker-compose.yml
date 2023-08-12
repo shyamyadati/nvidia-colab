@@ -1,0 +1,26 @@
+version: "3.8"
+services:
+  jupyter-server:
+    build: 
+      context: .
+      dockerfile: Dockerfile
+    image: slyad/nvidia-colab:latest
+    hostname: jupyter-server
+    environment:
+      - HOST=${HOST}
+    container_name: jupyter-container
+    network_mode: host
+    ports:
+      - 8888:8888
+    volumes:
+      - /data/jupyter/notebooks:/notebooks:rw
+      - /data/jupyter/data:/home/jupyter:rw
+    command: jupyter notebook --ip 0.0.0.0 --port 8888 --NotebookApp.notebook_dir=/notebooks --NotebookApp.custom_display_url=http://${HOST}.local:8888
+    #command: tail -f /dev/null
+    deploy:
+      resources:
+        reservations:
+          devices:
+            - driver: nvidia
+              count: all
+              capabilities: [gpu]

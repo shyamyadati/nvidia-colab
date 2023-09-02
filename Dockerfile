@@ -34,6 +34,9 @@ COPY requirements.txt ./requirements.txt
 # Intall the requirements
 RUN python3 -m pip install --no-cache-dir -r ./requirements.txt
 
+# install git
+RUN apt install -y git
+
 # add the jupyter user
 RUN groupadd -r jupyter && useradd -r -g jupyter jupyter
 

@@ -14,7 +14,9 @@ services:
       - 8888:8888
     volumes:
       - /data/jupyter/notebooks:/notebooks:rw
-      - /data/jupyter/data:/home/jupyter:rw
+      - /data/jupyter/home:/home/jupyter:rw
+      - /home/${USER}/.ssh/${KEYPRIV}:/home/jupyter/.ssh/${KEYPRIV}:ro
+      - /home/${USER}/.ssh/${KEYPRIV}.pub:/home/jupyter/.ssh/${KEYPRIV}.pub:ro
     command: jupyter notebook --ip 0.0.0.0 --port 8888 --NotebookApp.notebook_dir=/notebooks --NotebookApp.custom_display_url=http://${HOST}.local:8888
     #command: tail -f /dev/null
     deploy:
